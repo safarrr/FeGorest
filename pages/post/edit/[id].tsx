@@ -36,7 +36,7 @@ function Post({ post }: { post: Post }) {
         type: "success",
         content: "berhasil di save",
       });
-      router.push("/");
+      router.push("/post");
     } catch (error) {
       if (isAxiosError(error)) {
         messageApi.destroy();
