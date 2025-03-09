@@ -129,5 +129,3 @@ function UserCreate() {
 }
 
 export default UserCreate;
-
-// curl -i -H "Accept:application/json" -H "Content-Type:application/json" -H "Authorization: Bearer 5f80664d199e4c833f5653c600d976d39c2ebdf1631e1551e19e5c3054dfe729" -XPOST "https://gorest.co.in/public/v2/users" -d '{"name":"Tenali Ramakrishna", "gender":"male", "email":"tenali.ramakrishna@15ce.com", "status":"active"}'
