@@ -94,14 +94,19 @@ export default function HomePost() {
         {isLoading && <h1>loading</h1>}
         {isError && <h1>error</h1>}
         <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 items-center justify-center gap-2">
-          {data?.data?.map((post) => (
+          {data?.data?.map((post, i) => (
             // <Link href={"post/" + String(post.id)}>
             <Card
+              key={i}
               actions={[
-                <Link href={"/post/edit/" + String(post.id)}>
+                <Link
+                  key={`edit-${post.id}`}
+                  href={"/post/edit/" + String(post.id)}
+                >
                   <EditFilled key="edit" />
                 </Link>,
                 <Popconfirm
+                  key={`edit-${post.id}`}
                   title="hapus"
                   description="ingin menghapus ini?"
                   onConfirm={() => confirmDelete(String(post.id))}
@@ -111,7 +116,6 @@ export default function HomePost() {
                   <DeleteFilled key="Delete" />
                 </Popconfirm>,
               ]}
-              key={post.id}
               className=" transition-transform hover:scale-95"
               variant="outlined"
             >
