@@ -92,7 +92,9 @@ export default function HomePost() {
             onSearch={onSearch}
             style={{ width: 200 }}
           />
-          <Button type="primary">buat baru</Button>
+          <Button href="/post/create" type="primary">
+            buat baru
+          </Button>
         </div>
         {isLoading && <h1>loading</h1>}
         {isError && <h1>error</h1>}
