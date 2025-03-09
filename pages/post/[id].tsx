@@ -2,6 +2,7 @@ import axiosInstance from "@/utils/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Avatar,
+  Breadcrumb,
   Button,
   Drawer,
   Form,
@@ -82,13 +83,20 @@ function DetailPost({ post }: { post: Post }) {
   return (
     <>
       {contextHolder}
+      <Breadcrumb
+        items={[
+          { title: "Home", href: "/" },
+          { title: "post", href: "/post" },
+          { title: post.title },
+        ]}
+      />
       <div
         style={{
           background: colorBgContainer,
           borderRadius: borderRadiusLG,
           padding: 24,
         }}
-        className="w-full flex flex-col "
+        className="w-full mt-2 flex flex-col "
       >
         <h1 className="text-xl font-bold">{post.title}</h1>
         <div>

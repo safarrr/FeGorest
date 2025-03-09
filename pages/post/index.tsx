@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios, { isAxiosError } from "axios";
+import { isAxiosError } from "axios";
 import {
   Button,
   Card,
@@ -8,16 +8,10 @@ import {
   Input,
   theme,
   Popconfirm,
-  PopconfirmProps,
   message,
+  Breadcrumb,
 } from "antd";
-import {
-  DeleteFilled,
-  EditFilled,
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import axiosInstance from "@/utils/api";
 import { SearchProps } from "antd/es/input";
 import Link from "next/link";
@@ -78,6 +72,7 @@ export default function HomePost() {
   return (
     <>
       {contextHolder}
+      <Breadcrumb items={[{ title: "Home", href: "/" }, { title: "post" }]} />
       <div
         className="flex flex-col space-y-3 items-center justify-center"
         style={{

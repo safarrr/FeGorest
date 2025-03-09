@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import axiosInstance from "@/utils/api";
 import { GetServerSideProps } from "next/types";
 import {
+  Breadcrumb,
   Button,
   Form,
   FormProps,
@@ -85,7 +86,14 @@ function PostCreate() {
   return (
     <>
       {contextHolder}
-      <div className=" w-full h-full flex items-center justify-center ">
+      <Breadcrumb
+        items={[
+          { title: "Home", href: "/" },
+          { title: "post", href: "/post" },
+          { title: "create" },
+        ]}
+      />
+      <div className="mt-2 w-full h-full flex items-center justify-center ">
         <Form
           style={{
             background: colorBgContainer,

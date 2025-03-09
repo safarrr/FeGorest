@@ -8,32 +8,37 @@ import {
   FormProps,
   Input,
   message,
+  Select,
   theme,
 } from "antd";
 import { isAxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
-interface Post {
+interface User {
   id: number;
-  user_id: number;
-  title: string;
-  body: string;
+  email: string;
+  name: string;
+  gender: "male" | "female";
+  status: "active" | "inactive";
 }
 type FieldType = {
-  title?: string;
-  body?: string;
+  email: string;
+  name: string;
+  gender: "male" | "female";
+  status: "active" | "inactive";
 };
-function Post({ post }: { post: Post }) {
+function Post({ user }: { user: User }) {
   const router = useRouter();
   const [messageApi, contextHolder] = message.useMessage();
   const mutate = useMutation({
     mutationFn: async ({ data }: { data: FieldType }) => {
-      const res = await axiosInstance.put("posts/" + post.id, data);
+      const res = await axiosInstance.put("users/" + user.id, data);
     },
     onSuccess() {
       messageApi.open({
         type: "success",
         content: "berhasil di save",
       });
+      router.push("/user");
     },
     onError(error, variables, context) {
       if (isAxiosError(error)) {
@@ -58,11 +63,11 @@ function Post({ post }: { post: Post }) {
       <Breadcrumb
         items={[
           { title: "Home", href: "/" },
-          { title: "post", href: "/post" },
+          { title: "user", href: "/user" },
           { title: "edit" },
         ]}
       />
-      <div className="mt-2 w-full h-full flex items-center justify-center ">
+      <div className=" w-full h-full flex items-center justify-center ">
         <Form
           style={{
             background: colorBgContainer,
@@ -71,25 +76,48 @@ function Post({ post }: { post: Post }) {
           }}
           disabled={mutate.isPending}
           layout="vertical"
-          initialValues={post}
+          initialValues={user}
           name="control-hooks"
           className="w-full md:w-1/2"
           onFinish={onFinish}
         >
           <h1 className=" font-semibold text-lg">Edit</h1>
           <Form.Item<FieldType>
-            label="Title"
-            name="title"
-            rules={[{ required: true, message: "Please input your title!" }]}
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: "Please input your name!" }]}
           >
             <Input />
           </Form.Item>
           <Form.Item<FieldType>
-            label="Body"
-            name="body"
-            rules={[{ required: true, message: "Please input your body!" }]}
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Please input your name!" },
+              { type: "email", message: "Please input valid email!" },
+            ]}
           >
-            <Input.TextArea rows={10} />
+            <Input />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="gender"
+            name="gender"
+            rules={[{ required: true, message: "Please input your gender!" }]}
+          >
+            <Select showSearch placeholder="Select user" filterOption={false}>
+              <Select.Option value="male">male</Select.Option>
+              <Select.Option value="female">female</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="status"
+            name="status"
+            rules={[{ required: true, message: "Please input your status!" }]}
+          >
+            <Select showSearch placeholder="Select user" filterOption={false}>
+              <Select.Option value="active">active</Select.Option>
+              <Select.Option value="inactive">inactive</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item label={null}>
             <Button type="primary" htmlType="submit">
@@ -108,11 +136,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       return { notFound: true };
     }
 
-    const res = await axiosInstance.get<Post>(("posts/" + params.id) as string);
+    const res = await axiosInstance.get<User>(("users/" + params.id) as string);
 
     return {
       props: {
-        post: res.data,
+        user: res.data,
       },
     };
   } catch (error) {

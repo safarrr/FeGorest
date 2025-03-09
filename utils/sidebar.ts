@@ -1,4 +1,8 @@
-import { HomeOutlined, AppstoreOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  AppstoreOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { createElement } from "react";
 const linkSidebar = [
   {
@@ -12,6 +16,12 @@ const linkSidebar = [
     icon: createElement(AppstoreOutlined),
     label: "Post",
     link: "/post",
+  },
+  {
+    key: "user",
+    icon: createElement(UserOutlined),
+    label: "User",
+    link: "/user",
   },
 ];
 export default linkSidebar;
