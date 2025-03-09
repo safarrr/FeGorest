@@ -3,6 +3,7 @@ import axiosInstance from "@/utils/api";
 import { GetServerSideProps } from "next/types";
 import { Button, Form, FormProps, Input, message, theme } from "antd";
 import { isAxiosError } from "axios";
+import { useMutation } from "@tanstack/react-query";
 interface Post {
   id: number;
   user_id: number;
@@ -16,37 +17,31 @@ type FieldType = {
 function Post({ post }: { post: Post }) {
   const router = useRouter();
   const [messageApi, contextHolder] = message.useMessage();
-  const {
-    token: { colorBgContainer, colorPrimaryText, borderRadiusLG },
-  } = theme.useToken();
-
-  const onSuccess = () => {
-    messageApi.open({
-      type: "loading",
-      content: "sedang di save..",
-      duration: 0,
-    });
-  };
-  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-    try {
-      onSuccess();
-      const res = await axiosInstance.put("posts/" + post.id, values);
-      messageApi.destroy();
+  const mutate = useMutation({
+    mutationFn: async ({ data }: { data: FieldType }) => {
+      const res = await axiosInstance.put("posts/" + post.id, data);
+    },
+    onSuccess() {
       messageApi.open({
         type: "success",
         content: "berhasil di save",
       });
-      router.push("/");
-    } catch (error) {
+    },
+    onError(error, variables, context) {
       if (isAxiosError(error)) {
-        messageApi.destroy();
-        message.open({
+        messageApi.open({
           type: "error",
           content: error.response?.data.message,
         });
-        return;
       }
-    }
+    },
+  });
+  const {
+    token: { colorBgContainer, colorPrimaryText, borderRadiusLG },
+  } = theme.useToken();
+
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    mutate.mutate({ data: values });
   };
 
   return (
@@ -59,6 +54,7 @@ function Post({ post }: { post: Post }) {
             borderRadius: borderRadiusLG,
             padding: 24,
           }}
+          disabled={mutate.isPending}
           layout="vertical"
           initialValues={post}
           name="control-hooks"
